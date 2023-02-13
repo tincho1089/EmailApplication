@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./packages/frontend
+      dockerfile: Dockerfile.local
+    restart: always
+    env_file: .env
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    volumes:
+      - "./packages/frontend/src:/usr/src/app/src"
+    networks:
+      - bp-network
+    command: "npm run dev"
+  backend:
+      container_name: backend
+      build:
+        context: ./packages/backend
+        dockerfile: Dockerfile.local
+      restart: always
+      env_file: .env
+      volumes:
+        - ./packages/backend:/svr/app
+        - /svr/app/node_modules
+      networks:
+        - bp-network
+      command: npm run start
+      ports:
+        - "${BACKEND_PORT}:${BACKEND_PORT}"
+        - "9229:9229"
+        - "8001:8001"
+      depends_on:
+        - mongodb
+      links:
+        - mongodb
+  mongodb:
+      image : mongo:latest
+      container_name: mongodb
+      volumes:
+        - ./database:/data/db
+      ports:
+        - 27017:27017
+      networks:
+        - bp-network
+      restart: always
+networks:
+  bp-network:
+    driver: bridge
