@@ -28,7 +28,7 @@ To MongoDB database can be accessed through the extension MongoDB for VScode:
 
 The connection string should be for this case `mongodb://localhost:27017/`. After we stablish the connection, we should have access to the database:
 
-![db access](/images/mongoextension.png?raw=true "db access")
+![db access](/images/mongodb.png?raw=true "db access")
 
 
 ## Testing
